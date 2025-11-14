@@ -1,12 +1,15 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Plus, Search, AlertCircle, CheckCircle, Trash2 } from 'lucide-react';
+import { useTranslation } from '../i18n';
 
-function TranslationTable({ languages, keys, translations, onRefresh }) {
+function TranslationTable({ languages, keys, translations, onRefresh, appLang }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [newKey, setNewKey] = useState('');
   const [newCategory, setNewCategory] = useState('general');
   const [editingCell, setEditingCell] = useState(null);
   const [cellValue, setCellValue] = useState('');
+
+  const { t } = useTranslation(appLang);
 
   // Преобразование данных в таблицу
   const tableData = useMemo(() => {
@@ -62,7 +65,7 @@ function TranslationTable({ languages, keys, translations, onRefresh }) {
       setNewKey('');
       onRefresh();
     } else {
-      alert('Error: ' + result.error);
+      alert(t('msg_error_prefix') + ': ' + result.error);
     }
   };
 
@@ -87,7 +90,7 @@ function TranslationTable({ languages, keys, translations, onRefresh }) {
   };
 
   const handleDeleteKey = async (keyId) => {
-    if (!confirm('Delete this key and all its translations?')) return;
+    if (!confirm(t('trans_delete_confirm'))) return;
     
     const result = await window.electron.deleteKey(keyId);
     if (result.success) {
@@ -105,19 +108,29 @@ function TranslationTable({ languages, keys, translations, onRefresh }) {
   };
 
   return (
-    <div className="h-full flex flex-col bg-gray-900">
+    <div className="h-full flex flex-col">
       {/* Toolbar */}
-      <div className="bg-gray-800 border-b border-gray-700 p-4 space-y-3">
+      <div className="glass-panel" style={{ margin: '16px', padding: '16px' }}>
         {/* Search */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2" style={{ marginBottom: '12px' }}>
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <Search 
+              style={{ 
+                position: 'absolute', 
+                left: '12px', 
+                top: '50%', 
+                transform: 'translateY(-50%)',
+                color: 'var(--text-secondary)'
+              }} 
+              size={18} 
+            />
             <input
               type="text"
-              placeholder="Search keys or translations..."
+              placeholder={t('trans_search_placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:border-blue-500"
+              className="input"
+              style={{ paddingLeft: '40px' }}
             />
           </div>
         </div>
@@ -126,47 +139,47 @@ function TranslationTable({ languages, keys, translations, onRefresh }) {
         <div className="flex items-center gap-2">
           <input
             type="text"
-            placeholder="New key (e.g. ui.menu.start)"
+            placeholder={t('trans_new_key_placeholder')}
             value={newKey}
             onChange={(e) => setNewKey(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleAddKey()}
-            className="flex-1 px-4 py-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:border-blue-500"
+            className="input flex-1"
           />
           <select
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value)}
-            className="px-3 py-2 bg-gray-700 border border-gray-600 rounded focus:outline-none focus:border-blue-500"
+            className="select"
           >
-            <option value="general">General</option>
-            <option value="ui">UI</option>
-            <option value="dialog">Dialog</option>
-            <option value="item">Item</option>
-            <option value="quest">Quest</option>
+            <option value="general">{t('category_general')}</option>
+            <option value="ui">{t('category_ui')}</option>
+            <option value="dialog">{t('category_dialog')}</option>
+            <option value="item">{t('category_item')}</option>
+            <option value="quest">{t('category_quest')}</option>
           </select>
           <button
             onClick={handleAddKey}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded transition"
+            className="btn btn-primary"
           >
             <Plus size={18} />
-            Add Key
+            {t('trans_add_key')}
           </button>
         </div>
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto">
-        <table className="w-full">
-          <thead className="sticky top-0 bg-gray-800 border-b border-gray-700">
+      <div className="table-container">
+        <table className="table">
+          <thead>
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-gray-300 w-8"></th>
-              <th className="px-4 py-3 text-left font-medium text-gray-300 min-w-[250px]">Key</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-300 w-32">Category</th>
+              <th style={{ width: '32px' }}></th>
+              <th style={{ minWidth: '250px' }}>{t('trans_key')}</th>
+              <th style={{ width: '120px' }}>{t('trans_category')}</th>
               {languages.map(lang => (
-                <th key={lang.id} className="px-4 py-3 text-left font-medium text-gray-300 min-w-[200px]">
+                <th key={lang.id} style={{ minWidth: '200px' }}>
                   {lang.name} ({lang.code})
                 </th>
               ))}
-              <th className="px-4 py-3 w-20"></th>
+              <th style={{ width: '60px' }}></th>
             </tr>
           </thead>
           <tbody>
@@ -176,22 +189,22 @@ function TranslationTable({ languages, keys, translations, onRefresh }) {
               return (
                 <tr
                   key={row.keyId}
-                  className={`border-b border-gray-700 hover:bg-gray-800 transition ${
-                    status === 'missing' ? 'bg-red-900/20' :
-                    status === 'unused' ? 'bg-yellow-900/20' : ''
+                  className={`${
+                    status === 'missing' ? 'row-missing' :
+                    status === 'unused' ? 'row-unused' : ''
                   }`}
                 >
-                  <td className="px-4 py-2">
-                    {status === 'missing' && <AlertCircle size={16} className="text-red-400" />}
-                    {status === 'unused' && <AlertCircle size={16} className="text-yellow-400" />}
-                    {status === 'ok' && <CheckCircle size={16} className="text-green-400" />}
+                  <td>
+                    {status === 'missing' && <AlertCircle size={16} color="var(--text-error)" />}
+                    {status === 'unused' && <AlertCircle size={16} color="var(--text-warning)" />}
+                    {status === 'ok' && <CheckCircle size={16} color="var(--text-success)" />}
                   </td>
-                  <td className="px-4 py-2 font-mono text-sm text-blue-300">
+                  <td className="font-mono" style={{ color: 'var(--text-accent)' }}>
                     {row.key}
                   </td>
-                  <td className="px-4 py-2 text-sm">
-                    <span className="px-2 py-1 bg-gray-700 rounded text-xs">
-                      {row.category}
+                  <td>
+                    <span className="badge">
+                      {t(`category_${row.category}`)}
                     </span>
                   </td>
                   {languages.map(lang => {
@@ -199,7 +212,7 @@ function TranslationTable({ languages, keys, translations, onRefresh }) {
                     const isEditing = editingCell?.keyId === row.keyId && editingCell?.langCode === lang.code;
                     
                     return (
-                      <td key={lang.id} className="px-4 py-2">
+                      <td key={lang.id}>
                         {isEditing ? (
                           <input
                             type="text"
@@ -208,26 +221,33 @@ function TranslationTable({ languages, keys, translations, onRefresh }) {
                             onBlur={handleCellSave}
                             onKeyPress={(e) => e.key === 'Enter' && handleCellSave()}
                             autoFocus
-                            className="w-full px-2 py-1 bg-gray-700 border border-blue-500 rounded focus:outline-none"
+                            className="input"
                           />
                         ) : (
                           <div
                             onClick={() => handleCellEdit(row.keyId, lang.code, trans.value, trans.langId)}
-                            className={`px-2 py-1 rounded cursor-pointer hover:bg-gray-700 transition ${
-                              !trans.value.trim() ? 'text-gray-500 italic' : ''
-                            }`}
+                            className="cursor-pointer"
+                            style={{
+                              padding: '8px',
+                              borderRadius: 'var(--radius-sm)',
+                              color: !trans.value.trim() ? 'var(--text-secondary)' : 'inherit',
+                              fontStyle: !trans.value.trim() ? 'italic' : 'normal'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-tertiary)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                           >
-                            {trans.value || 'Click to edit...'}
+                            {trans.value || t('trans_edit_placeholder')}
                           </div>
                         )}
                       </td>
                     );
                   })}
-                  <td className="px-4 py-2">
+                  <td>
                     <button
                       onClick={() => handleDeleteKey(row.keyId)}
-                      className="p-1 hover:bg-red-600 rounded transition"
-                      title="Delete key"
+                      className="btn btn-danger p-1"
+                      title={t('dialog_delete_button')}
+                      style={{ padding: '4px' }}
                     >
                       <Trash2 size={16} />
                     </button>

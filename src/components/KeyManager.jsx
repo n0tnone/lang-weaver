@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, Globe, Search } from 'lucide-react';
+import { Plus, Globe, Search } from 'lucide-react';
+import { useTranslation } from '../i18n';
 
-function KeyManager({ keys, languages, onRefresh }) {
+function KeyManager({ keys, languages, onRefresh, appLang }) {
   const [newLangCode, setNewLangCode] = useState('');
   const [newLangName, setNewLangName] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+
+  const { t } = useTranslation(appLang);
 
   const handleAddLanguage = async () => {
     if (!newLangCode.trim() || !newLangName.trim()) return;
@@ -19,7 +22,7 @@ function KeyManager({ keys, languages, onRefresh }) {
       setNewLangName('');
       onRefresh();
     } else {
-      alert('Error adding language: ' + result.error);
+      alert(t('keys_error_add_lang') + ': ' + result.error);
     }
   };
 
@@ -36,52 +39,56 @@ function KeyManager({ keys, languages, onRefresh }) {
   }, {});
 
   return (
-    <div className="h-full flex bg-gray-900">
+    <div className="h-full flex">
       {/* Languages Panel */}
-      <div className="w-80 bg-gray-800 border-r border-gray-700 flex flex-col">
-        <div className="p-4 border-b border-gray-700">
-          <h2 className="text-lg font-bold text-blue-400 mb-4 flex items-center gap-2">
+      <div className="sidebar">
+        <div className="sidebar-header">
+          <h2 className="flex items-center gap-2" style={{ 
+            fontSize: '16px', 
+            fontWeight: 'bold', 
+            color: 'var(--text-accent)',
+            marginBottom: '16px'
+          }}>
             <Globe size={20} />
-            Languages
+            {t('keys_languages_title')}
           </h2>
 
-          <div className="space-y-2">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <input
               type="text"
-              placeholder="Language code (e.g. de)"
+              placeholder={t('keys_add_lang_code')}
               value={newLangCode}
               onChange={(e) => setNewLangCode(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-sm focus:outline-none focus:border-blue-500"
+              className="input"
             />
             <input
               type="text"
-              placeholder="Language name (e.g. Deutsch)"
+              placeholder={t('keys_add_lang_name')}
               value={newLangName}
               onChange={(e) => setNewLangName(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleAddLanguage()}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-sm focus:outline-none focus:border-blue-500"
+              className="input"
             />
             <button
               onClick={handleAddLanguage}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm transition"
+              className="btn btn-primary w-full"
             >
               <Plus size={16} />
-              Add Language
+              {t('keys_add_language')}
             </button>
           </div>
         </div>
 
-        <div className="flex-1 overflow-auto p-4">
-          <div className="space-y-2">
+        <div className="sidebar-content">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {languages.map(lang => (
               <div
                 key={lang.id}
-                className="flex items-center justify-between px-3 py-2 bg-gray-700 rounded"
+                className="glass-panel"
+                style={{ padding: '12px' }}
               >
-                <div>
-                  <div className="font-medium">{lang.name}</div>
-                  <div className="text-xs text-gray-400">{lang.code}</div>
-                </div>
+                <div style={{ fontWeight: '500' }}>{lang.name}</div>
+                <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{lang.code}</div>
               </div>
             ))}
           </div>
@@ -89,70 +96,115 @@ function KeyManager({ keys, languages, onRefresh }) {
       </div>
 
       {/* Keys Statistics */}
-      <div className="flex-1 p-6 overflow-auto">
-        <h2 className="text-2xl font-bold text-blue-400 mb-6">Keys Overview</h2>
+      <div className="flex-1" style={{ padding: '24px', overflowY: 'auto' }}>
+        <h2 style={{ 
+          fontSize: '24px', 
+          fontWeight: 'bold', 
+          color: 'var(--text-accent)',
+          marginBottom: '24px'
+        }}>
+          {t('keys_overview_title')}
+        </h2>
 
         {/* Search */}
-        <div className="mb-6">
+        <div style={{ marginBottom: '24px' }}>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <Search 
+              style={{ 
+                position: 'absolute', 
+                left: '12px', 
+                top: '50%', 
+                transform: 'translateY(-50%)',
+                color: 'var(--text-secondary)'
+              }} 
+              size={18} 
+            />
             <input
               type="text"
-              placeholder="Search keys..."
+              placeholder={t('keys_search_placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded focus:outline-none focus:border-blue-500"
+              className="input w-full"
+              style={{ paddingLeft: '40px' }}
             />
           </div>
         </div>
 
         {/* Statistics */}
-        <div className="grid grid-cols-4 gap-4 mb-6">
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(4, 1fr)', 
+          gap: '16px',
+          marginBottom: '24px'
+        }}>
           <StatCard
-            title="Total Keys"
+            title={t('keys_stat_total')}
             value={keys.length}
-            color="blue"
+            color="orange"
           />
           <StatCard
-            title="Categories"
+            title={t('keys_stat_categories')}
             value={Object.keys(groupedKeys).length}
             color="green"
           />
           <StatCard
-            title="Used in Dialogs"
+            title={t('keys_stat_used')}
             value={keys.filter(k => k.used_in && k.used_in.trim()).length}
             color="purple"
           />
           <StatCard
-            title="Unused"
+            title={t('keys_stat_unused')}
             value={keys.filter(k => !k.used_in || !k.used_in.trim()).length}
             color="yellow"
           />
         </div>
 
         {/* Grouped Keys */}
-        <div className="space-y-6">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           {Object.entries(groupedKeys).map(([category, categoryKeys]) => (
-            <div key={category} className="bg-gray-800 rounded-lg overflow-hidden">
-              <div className="px-4 py-3 bg-gray-750 border-b border-gray-700 flex items-center justify-between">
-                <h3 className="font-bold text-blue-300 uppercase text-sm">
-                  {category}
+            <div key={category} className="glass-panel">
+              <div style={{ 
+                padding: '12px 16px',
+                background: 'var(--bg-tertiary)',
+                borderBottom: '1px solid var(--border-color)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}>
+                <h3 style={{ 
+                  fontWeight: 'bold', 
+                  color: 'var(--accent-orange)',
+                  fontSize: '13px',
+                  textTransform: 'uppercase'
+                }}>
+                  {t(`category_${category}`)}
                 </h3>
-                <span className="text-xs text-gray-400">
-                  {categoryKeys.length} keys
+                <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                  {categoryKeys.length} {t('stats_keys').toLowerCase()}
                 </span>
               </div>
-              <div className="p-4">
-                <div className="grid grid-cols-2 gap-2">
+              <div style={{ padding: '16px' }}>
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(2, 1fr)', 
+                  gap: '8px'
+                }}>
                   {categoryKeys.map(key => (
                     <div
                       key={key.id}
-                      className="px-3 py-2 bg-gray-700 rounded text-sm font-mono"
+                      style={{ 
+                        padding: '12px',
+                        background: 'var(--bg-tertiary)',
+                        borderRadius: 'var(--radius-sm)',
+                        fontSize: '13px'
+                      }}
                     >
-                      <div className="text-blue-300">{key.key}</div>
+                      <div className="font-mono" style={{ color: 'var(--accent-orange)' }}>
+                        {key.key}
+                      </div>
                       {key.used_in && (
-                        <div className="text-xs text-gray-400 mt-1">
-                          Used in: {key.used_in}
+                        <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                          {t('keys_used_in')}: {key.used_in}
                         </div>
                       )}
                     </div>
@@ -168,17 +220,17 @@ function KeyManager({ keys, languages, onRefresh }) {
 }
 
 function StatCard({ title, value, color }) {
-  const colorClasses = {
-    blue: 'border-blue-500 text-blue-400',
-    green: 'border-green-500 text-green-400',
-    purple: 'border-purple-500 text-purple-400',
-    yellow: 'border-yellow-500 text-yellow-400'
+  const colorMap = {
+    orange: 'var(--accent-orange)',
+    green: 'var(--accent-green)',
+    purple: 'var(--accent-purple)',
+    yellow: 'var(--accent-yellow)'
   };
 
   return (
-    <div className={`bg-gray-800 border-l-4 ${colorClasses[color]} p-4 rounded`}>
-      <div className="text-sm text-gray-400 mb-1">{title}</div>
-      <div className={`text-3xl font-bold ${colorClasses[color]}`}>
+    <div className="stat-card" style={{ borderLeftColor: colorMap[color] }}>
+      <div className="stat-card-label">{title}</div>
+      <div className="stat-card-value" style={{ color: colorMap[color] }}>
         {value}
       </div>
     </div>

@@ -1,6 +1,6 @@
 {
   "name": "game-localization-tool",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Game localization management tool",
   "main": "electron/main.js",
   "scripts": {
@@ -24,7 +24,6 @@
     "electron": "^28.1.0",
     "electron-builder": "^24.9.1",
     "vite": "^5.0.10",
-    "tailwindcss": "^3.4.0",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
     "concurrently": "^8.2.2",

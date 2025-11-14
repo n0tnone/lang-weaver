@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Database, Settings, Upload, Download, Plus, Trash2, Save } from 'lucide-react';
+import { FileText, Database, Settings, Download, Globe } from 'lucide-react';
 import ProjectManager from './components/ProjectManager';
 import TranslationTable from './components/TranslationTable';
 import DialogEditor from './components/DialogEditor';
 import KeyManager from './components/KeyManager';
 import ExportDialog from './components/ExportDialog';
+import { useTranslation, availableLanguages } from './i18n';
 
 function App() {
   const [projectOpen, setProjectOpen] = useState(false);
@@ -15,6 +16,10 @@ function App() {
   const [dialogFiles, setDialogFiles] = useState([]);
   const [showExport, setShowExport] = useState(false);
   const [stats, setStats] = useState({ total: 0, translated: 0, unused: 0 });
+  const [appLang, setAppLang] = useState('ru');
+  const [showLangDropdown, setShowLangDropdown] = useState(false);
+
+  const { t } = useTranslation(appLang);
 
   useEffect(() => {
     if (projectOpen) {
@@ -62,58 +67,87 @@ function App() {
   };
 
   if (!projectOpen) {
-    return <ProjectManager onProjectOpen={handleProjectOpen} />;
+    return <ProjectManager onProjectOpen={handleProjectOpen} appLang={appLang} />;
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gray-900 text-gray-100">
+    <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700 px-6 py-3 flex items-center justify-between">
+      <div className="app-header">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl font-bold text-blue-400">Game Localization Tool</h1>
-          <div className="flex gap-2 text-sm">
-            <span className="px-2 py-1 bg-gray-700 rounded">
-              Keys: {stats.total}
+          <h1 className="app-title">{t('app_title')}</h1>
+          <div className="stats-container">
+            <span className="stat-badge">
+              {t('stats_keys')}: {stats.total}
             </span>
-            <span className="px-2 py-1 bg-green-900 rounded">
-              Translated: {stats.translated}
+            <span className="stat-badge success">
+              {t('stats_translated')}: {stats.translated}
             </span>
-            <span className="px-2 py-1 bg-yellow-900 rounded">
-              Unused: {stats.unused}
+            <span className="stat-badge warning">
+              {t('stats_unused')}: {stats.unused}
             </span>
           </div>
         </div>
-        <button
-          onClick={() => setShowExport(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded transition"
-        >
-          <Download size={16} />
-          Export
-        </button>
+        <div className="flex items-center gap-3">
+          {/* Language Switcher */}
+          <div className="lang-switcher">
+            <button
+              onClick={() => setShowLangDropdown(!showLangDropdown)}
+              className="lang-button"
+            >
+              <Globe size={14} />
+              {availableLanguages.find(l => l.code === appLang)?.flag}
+            </button>
+            {showLangDropdown && (
+              <div className="lang-dropdown">
+                {availableLanguages.map(lang => (
+                  <div
+                    key={lang.code}
+                    onClick={() => {
+                      setAppLang(lang.code);
+                      setShowLangDropdown(false);
+                    }}
+                    className={`lang-option ${appLang === lang.code ? 'active' : ''}`}
+                  >
+                    {lang.flag} {lang.name}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <button
+            onClick={() => setShowExport(true)}
+            className="btn btn-primary"
+          >
+            <Download size={16} />
+            {t('export_button')}
+          </button>
+        </div>
       </div>
 
       {/* Tabs */}
-      <div className="bg-gray-800 border-b border-gray-700 px-6 flex gap-1">
+      <div className="tabs-container">
         <TabButton
           active={currentTab === 'translations'}
           onClick={() => setCurrentTab('translations')}
           icon={<Database size={16} />}
         >
-          Translations
+          {t('tab_translations')}
         </TabButton>
         <TabButton
           active={currentTab === 'dialogs'}
           onClick={() => setCurrentTab('dialogs')}
           icon={<FileText size={16} />}
         >
-          Dialogs
+          {t('tab_dialogs')}
         </TabButton>
         <TabButton
           active={currentTab === 'keys'}
           onClick={() => setCurrentTab('keys')}
           icon={<Settings size={16} />}
         >
-          Keys Manager
+          {t('tab_keys')}
         </TabButton>
       </div>
 
@@ -125,6 +159,7 @@ function App() {
             keys={keys}
             translations={translations}
             onRefresh={loadProjectData}
+            appLang={appLang}
           />
         )}
         {currentTab === 'dialogs' && (
@@ -132,6 +167,7 @@ function App() {
             dialogFiles={dialogFiles}
             keys={keys}
             onRefresh={loadProjectData}
+            appLang={appLang}
           />
         )}
         {currentTab === 'keys' && (
@@ -139,6 +175,7 @@ function App() {
             keys={keys}
             languages={languages}
             onRefresh={loadProjectData}
+            appLang={appLang}
           />
         )}
       </div>
@@ -147,6 +184,7 @@ function App() {
         <ExportDialog
           onClose={() => setShowExport(false)}
           onExport={loadProjectData}
+          appLang={appLang}
         />
       )}
     </div>
@@ -157,11 +195,7 @@ function TabButton({ active, onClick, icon, children }) {
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-2 px-4 py-2 border-b-2 transition ${
-        active
-          ? 'border-blue-500 text-blue-400'
-          : 'border-transparent text-gray-400 hover:text-gray-200'
-      }`}
+      className={`tab-button ${active ? 'active' : ''}`}
     >
       {icon}
       {children}

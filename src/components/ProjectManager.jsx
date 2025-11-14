@@ -1,7 +1,10 @@
 import React from 'react';
 import { FolderPlus, FolderOpen } from 'lucide-react';
+import { useTranslation } from '../i18n';
 
-function ProjectManager({ onProjectOpen }) {
+function ProjectManager({ onProjectOpen, appLang }) {
+  const { t } = useTranslation(appLang);
+
   const handleCreateProject = async () => {
     const result = await window.electron.showSaveDialog();
     if (result.canceled) return;
@@ -10,7 +13,7 @@ function ProjectManager({ onProjectOpen }) {
     if (createResult.success) {
       onProjectOpen();
     } else {
-      alert('Error creating project: ' + createResult.error);
+      alert(t('msg_error_prefix') + ': ' + createResult.error);
     }
   };
 
@@ -22,40 +25,38 @@ function ProjectManager({ onProjectOpen }) {
     if (openResult.success) {
       onProjectOpen();
     } else {
-      alert('Error opening project: ' + openResult.error);
+      alert(t('msg_error_prefix') + ': ' + openResult.error);
     }
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-      <div className="text-center space-y-8">
-        <div>
-          <h1 className="text-4xl font-bold text-blue-400 mb-2">
-            Game Localization Tool
-          </h1>
-          <p className="text-gray-400">Manage your game translations efficiently</p>
-        </div>
+    <div className="welcome-screen">
+      <div className="welcome-card animate-fade-in">
+        <h1 className="welcome-title">
+          {t('project_title')}
+        </h1>
+        <p className="welcome-subtitle">{t('project_subtitle')}</p>
 
-        <div className="flex gap-4">
+        <div className="welcome-buttons">
           <button
             onClick={handleCreateProject}
-            className="group flex flex-col items-center gap-3 px-8 py-6 bg-gray-800 hover:bg-gray-750 border-2 border-gray-700 hover:border-blue-500 rounded-lg transition"
+            className="welcome-button"
           >
-            <FolderPlus size={48} className="text-blue-400" />
-            <span className="text-lg font-medium">Create New Project</span>
+            <FolderPlus size={48} style={{ color: 'var(--accent-orange)' }} />
+            <span>{t('project_create')}</span>
           </button>
 
           <button
             onClick={handleOpenProject}
-            className="group flex flex-col items-center gap-3 px-8 py-6 bg-gray-800 hover:bg-gray-750 border-2 border-gray-700 hover:border-green-500 rounded-lg transition"
+            className="welcome-button"
           >
-            <FolderOpen size={48} className="text-green-400" />
-            <span className="text-lg font-medium">Open Existing Project</span>
+            <FolderOpen size={48} style={{ color: 'var(--accent-green)' }} />
+            <span>{t('project_open')}</span>
           </button>
         </div>
 
-        <div className="pt-4 text-sm text-gray-500">
-          <p>Project files use .locproj extension</p>
+        <div style={{ paddingTop: '16px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+          <p>{t('project_extension_note')}</p>
         </div>
       </div>
     </div>
