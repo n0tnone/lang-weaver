@@ -2,39 +2,41 @@
 
 /* === CSS Variables === */
 :root {
-  /* Base colors - JetBrains palette */
-  --bg-primary: #2B2B2B;
-  --bg-secondary: #313335;
-  --bg-tertiary: #3C3F41;
-  --bg-elevated: #43454a;
+  /* Base colors - Darker palette with retro terminal vibes */
+  --bg-primary: #0A0A0A;
+  --bg-secondary: #1A1A1A;
+  --bg-tertiary: #121212;
+  --bg-elevated: #303030;
   
-  /* Glass effect backgrounds */
-  --glass-bg: rgba(49, 51, 53, 0.85);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  /* Glass effect backgrounds - Enhanced for deeper dark */
+  --glass-bg: rgba(26, 26, 26, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.08);
   
-  /* Text colors */
-  --text-primary: #BBBBBB;
-  --text-secondary: #787878;
-  --text-accent: #FFC66D;
-  --text-success: #6A8759;
-  --text-error: #BC3F3C;
-  --text-warning: #BBB529;
+  /* Text colors - Subtle green accents for retro feel */
+  --text-primary: #B0B0B0;
+  --text-secondary: #707070;
+  --text-accent: #98C379; /* Retro green for highlights */
+  --text-success: #98C379;
+  --text-error: #E06C75;
+  --text-warning: #E5C07B;
   
-  /* Accent colors */
-  --accent-orange: #CC7832;
-  --accent-yellow: #FFC66D;
-  --accent-green: #6A8759;
-  --accent-purple: #9876AA;
+  /* Accent colors - Shift to greens, avoiding over-saturation */
+  --accent-primary: #98C379; /* Main retro green */
+  --accent-secondary: #619C46; /* Darker green variant */
+  --accent-tertiary: #E5C07B; /* Kept yellow for warnings */
+  --accent-purple: #C678DD;
+  --accent-orange: #FFFFFF;
+  --accent-green: #FFFFFF; /* Adjusted for contrast */
   
   /* Borders */
-  --border-color: #323232;
-  --border-focus: #CC7832;
+  --border-color: #282828;
+  --border-focus: #98C379;
   
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
-  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.37);
+  /* Shadows - Softer for glassmorphism */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.6);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.45);
   
   /* Border radius */
   --radius-sm: 3px;
@@ -88,22 +90,22 @@ code, pre {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #545658;
+  background: #404040;
 }
 
 /* === Glass Morphism Effects === */
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px); /* Slightly increased blur for deeper effect */
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-glass);
 }
 
 .glass-light {
-  background: rgba(60, 63, 65, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(40, 40, 40, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 /* === Header === */
@@ -136,14 +138,14 @@ code, pre {
 }
 
 .stat-badge.success {
-  background: rgba(106, 135, 89, 0.2);
-  border-color: var(--accent-green);
+  background: rgba(152, 195, 121, 0.2);
+  border-color: var(--accent-primary);
   color: var(--text-success);
 }
 
 .stat-badge.warning {
-  background: rgba(187, 181, 41, 0.2);
-  border-color: var(--accent-yellow);
+  background: rgba(229, 192, 123, 0.2);
+  border-color: var(--accent-tertiary);
   color: var(--text-warning);
 }
 
@@ -163,22 +165,22 @@ code, pre {
 }
 
 .btn-primary {
-  background: var(--accent-orange);
-  color: #000;
+  background: var(--accent-primary);
+  color: #1A1A1A;
 }
 
 .btn-primary:hover {
-  background: #D68838;
+  background: #A8D389;
   box-shadow: var(--shadow-md);
 }
 
 .btn-success {
-  background: var(--accent-green);
-  color: #000;
+  background: var(--accent-primary);
+  color: #1A1A1A;
 }
 
 .btn-success:hover {
-  background: #7A9669;
+  background: #A8D389;
 }
 
 .btn-danger {
@@ -187,7 +189,7 @@ code, pre {
 }
 
 .btn-danger:hover {
-  background: #CC4F4C;
+  background: #F07C85;
 }
 
 .btn-secondary {
@@ -231,12 +233,12 @@ code, pre {
 
 .tab-button:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .tab-button.active {
   color: var(--text-accent);
-  border-bottom-color: var(--accent-orange);
+  border-bottom-color: var(--accent-primary);
 }
 
 /* === Inputs === */
@@ -318,15 +320,15 @@ code, pre {
 }
 
 .table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .table tbody tr.row-missing {
-  background: rgba(188, 63, 60, 0.1);
+  background: rgba(224, 108, 117, 0.1);
 }
 
 .table tbody tr.row-unused {
-  background: rgba(187, 181, 41, 0.1);
+  background: rgba(229, 192, 123, 0.1);
 }
 
 /* === Sidebar === */
@@ -372,15 +374,15 @@ code, pre {
 }
 
 .sidebar-item.active {
-  background: var(--accent-orange);
-  color: #000;
+  background: var(--accent-primary);
+  color: #1A1A1A;
 }
 
 /* === Glass Panels === */
 .glass-panel {
   background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-glass);
@@ -390,7 +392,7 @@ code, pre {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -429,12 +431,12 @@ code, pre {
 .stat-card {
   padding: 16px;
   background: var(--bg-tertiary);
-  border-left: 3px solid var(--accent-orange);
+  border-left: 3px solid var(--accent-primary);
   border-radius: var(--radius-sm);
 }
 
 .stat-card.green {
-  border-left-color: var(--accent-green);
+  border-left-color: var(--accent-primary);
 }
 
 .stat-card.purple {
@@ -442,7 +444,7 @@ code, pre {
 }
 
 .stat-card.yellow {
-  border-left-color: var(--accent-yellow);
+  border-left-color: var(--accent-tertiary);
 }
 
 .stat-card-label {
@@ -492,7 +494,7 @@ code, pre {
 .alert {
   padding: 12px 16px;
   background: var(--bg-tertiary);
-  border-left: 3px solid var(--accent-orange);
+  border-left: 3px solid var(--accent-primary);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: flex-start;
@@ -502,13 +504,13 @@ code, pre {
 
 .alert.error {
   border-left-color: var(--text-error);
-  background: rgba(188, 63, 60, 0.15);
+  background: rgba(224, 108, 117, 0.15);
   color: var(--text-error);
 }
 
 .alert.warning {
   border-left-color: var(--text-warning);
-  background: rgba(187, 181, 41, 0.15);
+  background: rgba(229, 192, 123, 0.15);
   color: var(--text-warning);
 }
 
@@ -525,7 +527,7 @@ code, pre {
   text-align: center;
   padding: 48px;
   background: var(--glass-bg);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-glass);
@@ -564,7 +566,7 @@ code, pre {
 }
 
 .welcome-button:hover {
-  border-color: var(--accent-orange);
+  border-color: var(--accent-primary);
   background: var(--bg-elevated);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
@@ -586,6 +588,8 @@ code, pre {
   display: flex;
   align-items: center;
   gap: 6px;
+  min-width: 70px;
+  justify-content: space-between;
 }
 
 .lang-dropdown {
@@ -597,7 +601,7 @@ code, pre {
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-lg);
-  min-width: 120px;
+  min-width: 100%; 
   z-index: 100;
 }
 
@@ -606,6 +610,11 @@ code, pre {
   font-size: 12px;
   cursor: pointer;
   transition: background var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .lang-option:hover {
@@ -613,8 +622,8 @@ code, pre {
 }
 
 .lang-option.active {
-  background: var(--accent-orange);
-  color: #000;
+  background: var(--accent-primary);
+  color: #1A1A1A;
 }
 
 .flag-icon {
@@ -623,7 +632,9 @@ code, pre {
   height: 14px;
   border-radius: 2px;
   object-fit: cover;
+  flex-shrink: 0;
 }
+
 
 /* === Animations === */
 @keyframes fadeIn {

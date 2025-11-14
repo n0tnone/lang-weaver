@@ -1,0 +1,32 @@
+body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+.allow-selection,
+input, 
+textarea, 
+[contenteditable="true"],
+.code-block,
+.translation-text {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+    cursor: text;
+}
+
+.data-table {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+img, a {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+}

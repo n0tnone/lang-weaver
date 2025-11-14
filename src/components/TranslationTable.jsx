@@ -163,6 +163,37 @@ function TranslationTable({ languages, keys, translations, onRefresh, appLang })
             <Plus size={18} />
             {t('trans_add_key')}
           </button>
+            <button
+              onClick={async () => {
+                const { builtInTranslations } = await import('../i18n');
+                const keys = Object.keys(builtInTranslations.ru);
+                
+                for (const key of keys) {
+                  await window.electron.addKey({
+                    key: `app.${key}`,
+                    category: 'app_ui'
+                  });
+                  
+                  for (const [langCode, translations] of Object.entries(builtInTranslations)) {
+                    const lang = languages.find(l => l.code === langCode);
+                    if (lang) {
+                      await window.electron.updateTranslation({
+                        keyId: null,
+                        languageId: lang.id,
+                        value: translations[key]
+                      });
+                    }
+                  }
+                }
+                
+                alert(t('alert_success'));
+                onRefresh();
+              }}
+              className="btn btn-secondary"
+              style={{ marginLeft: '8px' }}
+            >
+              {t('import_json')}
+          </button>
         </div>
       </div>
 

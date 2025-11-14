@@ -79,6 +79,24 @@ function KeyManager({ keys, languages, onRefresh, appLang }) {
           </div>
         </div>
 
+        <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--border-color)' }}>
+          <button
+            onClick={async () => {
+              const result = await window.electron.exportTranslations({
+                exportPath: './public/locales1',
+                minify: false
+              });
+              
+              if (result.success) {
+                alert('Локализация экспортирована в public/locales/');
+              }
+            }}
+            className="btn btn-secondary w-full"
+          >
+            *
+          </button>
+        </div>
+
         <div className="sidebar-content">
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {languages.map(lang => (

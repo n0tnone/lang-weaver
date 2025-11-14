@@ -6,6 +6,7 @@ import DialogEditor from './components/DialogEditor';
 import KeyManager from './components/KeyManager';
 import ExportDialog from './components/ExportDialog';
 import { useTranslation, availableLanguages } from './i18n';
+import { getFlag } from './i18n';
 
 function App() {
   const [projectOpen, setProjectOpen] = useState(false);
@@ -96,22 +97,26 @@ function App() {
               className="lang-button"
             >
               <Globe size={14} />
-              {availableLanguages.find(l => l.code === appLang)?.flag}
+              {React.createElement(getFlag(appLang), { style: { width: '20px', height: '14px' } })}
             </button>
             {showLangDropdown && (
               <div className="lang-dropdown">
-                {availableLanguages.map(lang => (
-                  <div
-                    key={lang.code}
-                    onClick={() => {
-                      setAppLang(lang.code);
-                      setShowLangDropdown(false);
-                    }}
-                    className={`lang-option ${appLang === lang.code ? 'active' : ''}`}
-                  >
-                    {lang.flag} {lang.name}
-                  </div>
-                ))}
+                {availableLanguages.map(lang => {
+                  const Flag = getFlag(lang.code);
+                  return (
+                    <div
+                      key={lang.code}
+                      onClick={() => {
+                        setAppLang(lang.code);
+                        setShowLangDropdown(false);
+                      }}
+                      className={`lang-option ${appLang === lang.code ? 'active' : ''}`}
+                    >
+                      <Flag style={{ width: '20px', height: '14px', marginRight: '8px' }} />
+                      {lang.name}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -202,5 +207,29 @@ function TabButton({ active, onClick, icon, children }) {
     </button>
   );
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const minimizeBtn = document.getElementById('minimizeBtn');
+    const maximizeBtn = document.getElementById('maximizeBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    
+    if (minimizeBtn) {
+        minimizeBtn.addEventListener('click', () => {
+            window.electron.minimizeWindow();
+        });
+    }
+    
+    if (maximizeBtn) {
+        maximizeBtn.addEventListener('click', () => {
+            window.electron.maximizeWindow();
+        });
+    }
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            window.electron.closeWindow();
+        });
+    }
+});
 
 export default App;

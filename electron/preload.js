@@ -27,5 +27,10 @@ contextBridge.exposeInMainWorld('electron', {
   deleteDialogFile: (filename) => ipcRenderer.invoke('delete-dialog-file', filename),
   
   // Export
-  exportTranslations: (data) => ipcRenderer.invoke('export-translations', data)
+  exportTranslations: (data) => ipcRenderer.invoke('export-translations', data),
+
+  // titlebar
+  minimizeWindow: () => ipcRenderer.send('minimize-window'),
+  maximizeWindow: () => ipcRenderer.send('maximize-window'),
+  closeWindow: () => ipcRenderer.send('close-window')
 });

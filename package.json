@@ -1,7 +1,13 @@
 {
-  "name": "game-localization-tool",
-  "version": "1.0.1",
+  "name": "lang-weaver",
+  "productName": "Lang Weaver",
+  "version": "1.0.2",
   "description": "Game localization management tool",
+  "author": {
+    "name": "txpa",
+    "email": "n3everlessy@yandex.ru"
+  },
+  "homepage": "https://github.com/n0tnone/lang-weaver",
   "main": "electron/main.js",
   "scripts": {
     "start": "concurrently \"npm run dev\" \"npm run electron\"",
@@ -9,37 +15,72 @@
     "build": "vite build",
     "electron": "wait-on http://localhost:5173 && electron .",
     "rebuild": "electron-rebuild -f -w better-sqlite3",
-    "package": "electron-builder"
+    "package": "electron-builder",
+    "dist": "npm run build && electron-builder --publish=never",
+    "dist:win": "npm run build && electron-builder --win --x64",
+    "dist:portable": "npm run build && electron-builder --win --x64 --portable",
+    "dist:all": "npm run build && electron-builder -wml --x64"
   },
   "dependencies": {
-    "better-sqlite3": "^9.6.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-data-grid": "^7.0.0-beta.58",
     "@monaco-editor/react": "^4.6.0",
-    "lucide-react": "^0.263.1"
+    "better-sqlite3": "^9.6.0",
+    "country-flag-icons": "^1.5.21",
+    "lucide-react": "^0.263.1",
+    "react": "^19.2.0",
+    "react-data-grid": "^7.0.0-beta.58",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@electron/rebuild": "^4.0.1",
     "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.16",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "electron": "^28.1.0",
     "electron-builder": "^24.9.1",
-    "vite": "^5.0.10",
-    "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
-    "concurrently": "^8.2.2",
-    "wait-on": "^7.2.0",
-    "@electron/rebuild": "^4.0.1",
-    "cross-env": "^7.0.3"
+    "vite": "^5.0.10",
+    "wait-on": "^7.2.0"
   },
   "build": {
-    "appId": "com.localization.tool",
-    "productName": "Game Localization Tool",
+    "appId": "ru.langweaver.app",
+    "productName": "Lang Weaver",
+    "copyright": "Copyright © 2025",
     "directories": {
-      "buildResources": "assets"
+      "buildResources": "build",
+      "output": "dist"
     },
     "files": [
       "dist/**/*",
-      "electron/**/*"
-    ]
+      "electron/**/*",
+      "node_modules/**/*"
+    ],
+    "extraMetadata": {
+      "main": "electron/main.js"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "executableName": "langweaver64.exe"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Lang Weaver"
+    },
+    "portable": {
+      "artifactName": "Lang_Weaver_${version}_Portable.exe"
+    }
   }
 }

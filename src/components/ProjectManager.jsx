@@ -42,20 +42,20 @@ function ProjectManager({ onProjectOpen, appLang }) {
             onClick={handleCreateProject}
             className="welcome-button"
           >
-            <FolderPlus size={48} style={{ color: 'var(--accent-orange)' }} />
-            <span>{t('project_create')}</span>
+            <FolderPlus size={48} style={{ color: 'var(--accent-primary)' }} />
+            <span style={{ color: 'var(--text-secondary)'}}>{t('project_create')}</span>
           </button>
 
           <button
             onClick={handleOpenProject}
             className="welcome-button"
           >
-            <FolderOpen size={48} style={{ color: 'var(--accent-green)' }} />
-            <span>{t('project_open')}</span>
+            <FolderOpen size={48} style={{ color: 'var(--accent-primary)' }} />
+            <span style={{ color: 'var(--text-secondary)'}}>{t('project_open')}</span>
           </button>
         </div>
 
-        <div style={{ paddingTop: '16px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+        <div style={{ paddingTop: '24px', fontSize: '12px', color: 'var(--text-warning)' }}>
           <p>{t('project_extension_note')}</p>
         </div>
       </div>

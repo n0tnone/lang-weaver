@@ -1,0 +1,70 @@
+#customTitleBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+    border-bottom: 2px solid #98C379;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    z-index: 10000;
+    -webkit-app-region: drag;
+    user-select: none;
+}
+
+.title-text {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #dadada;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.window-controls {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    -webkit-app-region: no-drag;
+}
+
+.control-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: #dadada;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.control-btn:active {
+    transform: scale(0.95);
+}
+
+.control-btn.close {
+    background: rgba(255, 79, 80, 0.3);
+    border: 1px solid rgba(255, 79, 80, 0.5);
+    font-size: 16px;
+}
+
+.control-btn.close:hover {
+    background: rgba(255, 79, 80, 0.6);
+}
+
+.main-content {
+    margin-top: 40px;
+}

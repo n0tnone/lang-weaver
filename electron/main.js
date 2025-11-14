@@ -10,23 +10,33 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1400,
     height: 900,
+    frame: false,
+    titleBarStyle: 'hidden',
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      devTools: app.isPackaged ? false : true
     },
     backgroundColor: '#1a1a1a',
-    titleBarStyle: 'default'
+    titleBarStyle: 'default',
+    icon: path.join(__dirname, '../../build/icon.ico')
   });
 
     const isDev = !app.isPackaged;
 
-    if (isDev) {
+  if (isDev) {
     mainWindow.loadURL('http://localhost:5173');
-    mainWindow.webContents.openDevTools();
-    } else {
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
+    if (process.env.DEBUG) {
+      mainWindow.webContents.openDevTools();
     }
+  } else {
+    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
+  }
+
+  mainWindow.webContents.setWindowOpenHandler(() => {
+    return { action: 'deny' };
+  });
 }
 
 app.whenReady().then(createWindow);
@@ -338,6 +348,22 @@ ipcMain.handle('export-translations', async (event, { exportPath, minify }) => {
   } catch (error) {
     return { success: false, error: error.message };
   }
+});
+
+ipcMain.on('minimize-window', () => {
+    mainWindow.minimize();
+});
+
+ipcMain.on('maximize-window', () => {
+    if (mainWindow.isMaximized()) {
+        mainWindow.unmaximize();
+    } else {
+        mainWindow.maximize();
+    }
+});
+
+ipcMain.on('close-window', () => {
+    mainWindow.close();
 });
 
 // Вспомогательная функция для извлечения ключей из диалога
