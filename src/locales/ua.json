@@ -71,10 +71,6 @@
   "export_error": "Помилка експорту",
   "msg_error_prefix": "Помилка",
   "msg_success_prefix": "Успіх",
-  "lang_russian": "Російська",
-  "lang_english": "Англійська",
-  "lang_japanese": "Японська",
-  "lang_ua": "Японська",
   "alert_success": "Успіх",
   "import_json": "Імпорт локалі"
 }

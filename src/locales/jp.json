@@ -71,9 +71,6 @@
   "export_error": "エクスポート失敗",
   "msg_error_prefix": "エラー",
   "msg_success_prefix": "成功",
-  "lang_russian": "Русский",
-  "lang_english": "English",
-  "lang_japanese": "日本語",
   "alert_success": "成功",
   "import_json": "ロケールのインポート"
 }

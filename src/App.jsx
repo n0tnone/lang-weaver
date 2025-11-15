@@ -79,13 +79,13 @@ function App() {
           <h1 className="app-title">{t('app_title')}</h1>
           <div className="stats-container">
             <span className="stat-badge">
-              {t('stats_keys')}: {stats.total}
+              {t('stats_keys')} - {stats.total}
             </span>
             <span className="stat-badge success">
-              {t('stats_translated')}: {stats.translated}
+              {t('stats_translated')} - {stats.translated}
             </span>
             <span className="stat-badge warning">
-              {t('stats_unused')}: {stats.unused}
+              {t('stats_unused')} - {stats.unused}
             </span>
           </div>
         </div>
